@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-package com.jlefebure.spring.boot.minio;
+package me.batizhao.minio.config;
 
 
-import com.jlefebure.spring.boot.minio.notification.MinioNotification;
+import me.batizhao.minio.annotation.MinioNotification;
 import io.minio.CloseableIterator;
 import io.minio.ListenBucketNotificationArgs;
 import io.minio.MinioClient;

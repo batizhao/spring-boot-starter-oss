@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.jlefebure.spring.boot.minio.MinioConfiguration,\
-  com.jlefebure.spring.boot.minio.MinioNotificationConfiguration,\
-  com.jlefebure.spring.boot.minio.MinioMetricConfiguration
+  me.batizhao.minio.config.MinioConfiguration,\
+  me.batizhao.minio.config.MinioNotificationConfiguration,\
+  me.batizhao.minio.config.MinioMetricConfiguration

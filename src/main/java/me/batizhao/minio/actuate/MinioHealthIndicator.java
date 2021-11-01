@@ -14,10 +14,11 @@
  *  limitations under the License.
  */
 
-package com.jlefebure.spring.boot.minio;
+package me.batizhao.minio.actuate;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MinioClient;
+import me.batizhao.minio.config.MinioConfigurationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementContextAutoConfiguration;
 import org.springframework.boot.actuate.health.Health;

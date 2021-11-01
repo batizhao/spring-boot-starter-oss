@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.jlefebure.spring.boot.minio;
+package me.batizhao.minio.config;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;

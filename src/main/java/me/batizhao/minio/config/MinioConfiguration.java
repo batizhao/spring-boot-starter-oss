@@ -14,12 +14,13 @@
  *  limitations under the License.
  */
 
-package com.jlefebure.spring.boot.minio;
+package me.batizhao.minio.config;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.errors.*;
+import me.batizhao.minio.exception.MinioException;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ import java.security.NoSuchAlgorithmException;
 @Configuration
 @ConditionalOnClass(MinioClient.class)
 @EnableConfigurationProperties(MinioConfigurationProperties.class)
-@ComponentScan("com.jlefebure.spring.boot.minio")
+@ComponentScan("me.batizhao.minio.api")
 public class MinioConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MinioConfiguration.class);

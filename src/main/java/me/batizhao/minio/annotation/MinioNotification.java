@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.jlefebure.spring.boot.minio.notification;
+package me.batizhao.minio.annotation;
 
 import io.minio.messages.NotificationRecords;
 import org.springframework.scheduling.annotation.Async;
