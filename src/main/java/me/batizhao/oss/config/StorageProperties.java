@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.batizhao.minio.config;
+package me.batizhao.oss.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -29,10 +29,12 @@ public class StorageProperties {
      * das or minio
      */
     private String location = "das";
+
     /**
-     * URL for Minio instance. Can include the HTTP scheme. Must include the port. If the port is not provided, then the port of the HTTP is taken.
+     * minio: http://172.31.21.208:9000
+     * das: path
      */
-    private String url = "https://play.min.io";
+    private String url = "/tmp/upload";
 
     /**
      * Access key (login) on Minio instance

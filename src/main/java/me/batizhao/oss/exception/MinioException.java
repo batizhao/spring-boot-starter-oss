@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.batizhao.minio.exception;
+package me.batizhao.oss.exception;
 
 
 /**

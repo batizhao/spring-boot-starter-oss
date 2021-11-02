@@ -1,8 +1,8 @@
-package me.batizhao.minio.config;
+package me.batizhao.oss.config;
 
 import lombok.RequiredArgsConstructor;
-import me.batizhao.minio.api.DasService;
-import me.batizhao.minio.api.MinioService;
+import me.batizhao.oss.api.DasService;
+import me.batizhao.oss.api.MinioService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

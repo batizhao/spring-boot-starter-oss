@@ -14,17 +14,17 @@
  *  limitations under the License.
  */
 
-package me.batizhao.minio.config;
+package me.batizhao.oss.config;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.errors.*;
-import me.batizhao.minio.exception.MinioException;
+import me.batizhao.oss.exception.MinioException;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +42,7 @@ public class MinioAutoConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(MinioAutoConfiguration.class);
 
     @Bean
-    @ConditionalOnClass(MinioClient.class)
+    @ConditionalOnProperty(name = "pecado.storage.location", havingValue = "minio")
     public MinioClient minioClient(StorageProperties storageProperties) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, InternalException, ErrorResponseException, InvalidResponseException, MinioException, XmlParserException, ServerException {
 
         MinioClient minioClient;

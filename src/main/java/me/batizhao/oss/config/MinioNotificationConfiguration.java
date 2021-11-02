@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-package me.batizhao.minio.config;
+package me.batizhao.oss.config;
 
 
-import me.batizhao.minio.annotation.MinioNotification;
+import me.batizhao.oss.annotation.MinioNotification;
 import io.minio.CloseableIterator;
 import io.minio.ListenBucketNotificationArgs;
 import io.minio.MinioClient;

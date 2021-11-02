@@ -14,14 +14,14 @@
  *  limitations under the License.
  */
 
-package me.batizhao.minio.api;
+package me.batizhao.oss.api;
 
 
 import io.minio.*;
 import io.minio.messages.Item;
-import me.batizhao.minio.exception.MinioException;
-import me.batizhao.minio.exception.MinioFetchException;
-import me.batizhao.minio.config.StorageProperties;
+import me.batizhao.oss.exception.MinioException;
+import me.batizhao.oss.exception.MinioFetchException;
+import me.batizhao.oss.config.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.batizhao.minio.annotation;
+package me.batizhao.oss.annotation;
 
 import io.minio.messages.NotificationRecords;
 import org.springframework.scheduling.annotation.Async;

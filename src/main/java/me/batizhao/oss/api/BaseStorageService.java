@@ -1,6 +1,6 @@
-package me.batizhao.minio.api;
+package me.batizhao.oss.api;
 
-import me.batizhao.minio.config.StorageProperties;
+import me.batizhao.oss.config.StorageProperties;
 import org.springframework.util.Assert;
 
 /**

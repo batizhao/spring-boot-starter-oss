@@ -1,9 +1,9 @@
-package me.batizhao.minio;
+package me.batizhao.oss;
 
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.minio.api.StorageService;
-import me.batizhao.minio.config.StorageAutoConfiguration;
-import me.batizhao.minio.config.StorageProperties;
+import me.batizhao.oss.api.StorageService;
+import me.batizhao.oss.config.StorageAutoConfiguration;
+import me.batizhao.oss.config.StorageProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @Import({StorageAutoConfiguration.class})
 @EnableConfigurationProperties(value = StorageProperties.class)
 @TestPropertySource(properties = {"pecado.storage.location=das",
-        "pecado.storage.url=http://172.31.21.208:9000",
+        "pecado.storage.url=/tmp/upload",
         "pecado.storage.bucket=stalber",
         "pecado.storage.access-key=minio",
         "pecado.storage.secret-key=minio123"})

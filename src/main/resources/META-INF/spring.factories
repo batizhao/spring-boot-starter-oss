@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  me.batizhao.minio.config.StorageAutoConfiguration,\
-  me.batizhao.minio.config.MinioNotificationConfiguration,\
-  me.batizhao.minio.config.MinioMetricConfiguration
+  me.batizhao.oss.config.StorageAutoConfiguration,\
+  me.batizhao.oss.config.MinioNotificationConfiguration,\
+  me.batizhao.oss.config.MinioMetricConfiguration

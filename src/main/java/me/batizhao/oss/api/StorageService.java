@@ -1,4 +1,4 @@
-package me.batizhao.minio.api;
+package me.batizhao.oss.api;
 
 import java.util.List;
 

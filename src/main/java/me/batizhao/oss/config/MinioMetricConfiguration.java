@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.batizhao.minio.config;
+package me.batizhao.oss.config;
 
 
 import io.micrometer.core.instrument.MeterRegistry;
