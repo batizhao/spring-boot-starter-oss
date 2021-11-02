@@ -1,14 +1,13 @@
 package me.batizhao.minio.config;
 
-import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
-import me.batizhao.minio.api.LocalStorageService;
+import me.batizhao.minio.api.DasService;
 import me.batizhao.minio.api.MinioService;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * @author batizhao
@@ -17,12 +16,13 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(StorageProperties.class)
+@Import(MinioAutoConfiguration.class)
 public class StorageAutoConfiguration {
 
     @Bean
-    @ConditionalOnProperty(name = "pecado.storage.location", havingValue = "local")
-    public LocalStorageService localStorageService(StorageProperties properties) {
-        return new LocalStorageService(properties);
+    @ConditionalOnProperty(name = "pecado.storage.location", havingValue = "das")
+    public DasService localStorageService(StorageProperties properties) {
+        return new DasService(properties);
     }
 
     @Bean

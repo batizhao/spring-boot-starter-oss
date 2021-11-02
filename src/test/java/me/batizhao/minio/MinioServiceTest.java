@@ -2,7 +2,7 @@ package me.batizhao.minio;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.minio.api.StorageService;
-import me.batizhao.minio.config.MinioConfiguration;
+import me.batizhao.minio.config.StorageAutoConfiguration;
 import me.batizhao.minio.config.StorageProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,9 +17,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @date 2021/10/29
  */
 @ExtendWith(SpringExtension.class)
-@Import({MinioConfiguration.class})
+@Import({StorageAutoConfiguration.class})
 @EnableConfigurationProperties(value = StorageProperties.class)
-@TestPropertySource(properties = {"pecado.storage.location=local",
+@TestPropertySource(properties = {"pecado.storage.location=das",
         "pecado.storage.url=http://172.31.21.208:9000",
         "pecado.storage.bucket=stalber",
         "pecado.storage.access-key=minio",
@@ -31,7 +31,7 @@ public class MinioServiceTest {
     StorageService storageService;
 
     @Test
-    void name() {
-        log.info("MinIO bucketList : {}", storageService.list());
+    void testList() {
+        log.info("bucketList : {}", storageService.list());
     }
 }

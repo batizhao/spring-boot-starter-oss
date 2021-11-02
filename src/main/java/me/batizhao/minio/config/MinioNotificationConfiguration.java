@@ -41,7 +41,7 @@ import java.util.List;
 
 @Configuration
 @AutoConfigureBefore(MinioMetricConfiguration.class)
-@AutoConfigureAfter(MinioConfiguration.class)
+@AutoConfigureAfter(MinioAutoConfiguration.class)
 public class MinioNotificationConfiguration implements ApplicationContextAware {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MinioNotificationConfiguration.class);

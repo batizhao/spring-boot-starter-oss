@@ -16,7 +16,6 @@
 
 package me.batizhao.minio.config;
 
-
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -27,9 +26,9 @@ import java.time.Duration;
 public class StorageProperties {
 
     /**
-     * local or minio
+     * das or minio
      */
-    private String location = "local";
+    private String location = "das";
     /**
      * URL for Minio instance. Can include the HTTP scheme. Must include the port. If the port is not provided, then the port of the HTTP is taken.
      */

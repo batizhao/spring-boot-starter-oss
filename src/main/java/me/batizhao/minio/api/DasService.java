@@ -9,14 +9,14 @@ import java.util.List;
  * @author batizhao
  * @date 2021/11/1
  */
-public class LocalStorageService extends BaseStorageService implements StorageService<File> {
+public class DasService extends BaseStorageService implements StorageService<File> {
 
     /**
      * Creates new instance
      *
      * @param properties the encoding properties
      */
-    public LocalStorageService(StorageProperties properties) {
+    public DasService(StorageProperties properties) {
         super(properties);
     }
 

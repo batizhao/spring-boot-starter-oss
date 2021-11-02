@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 @ConditionalOnClass({MinioClient.class, ManagementContextAutoConfiguration.class})
 @ConditionalOnEnabledHealthIndicator("minio")
 @AutoConfigureBefore(HealthContributorAutoConfiguration.class)
-@AutoConfigureAfter(MinioConfiguration.class)
+@AutoConfigureAfter(MinioAutoConfiguration.class)
 public class MinioMetricConfiguration {
 
     private final MeterRegistry meterRegistry;

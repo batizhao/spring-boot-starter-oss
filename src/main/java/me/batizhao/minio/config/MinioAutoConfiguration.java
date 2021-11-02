@@ -28,7 +28,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -38,10 +37,9 @@ import java.security.NoSuchAlgorithmException;
 
 @Configuration
 @EnableConfigurationProperties(StorageProperties.class)
-@Import(StorageAutoConfiguration.class)
-public class MinioConfiguration {
+public class MinioAutoConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MinioConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MinioAutoConfiguration.class);
 
     @Bean
     @ConditionalOnClass(MinioClient.class)
