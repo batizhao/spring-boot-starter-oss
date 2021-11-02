@@ -18,7 +18,7 @@ package me.batizhao.minio.actuate;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MinioClient;
-import me.batizhao.minio.config.MinioConfigurationProperties;
+import me.batizhao.minio.config.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementContextAutoConfiguration;
 import org.springframework.boot.actuate.health.Health;
@@ -36,12 +36,12 @@ import org.springframework.stereotype.Component;
 public class MinioHealthIndicator implements HealthIndicator {
 
     private final MinioClient minioClient;
-    private final MinioConfigurationProperties minioConfigurationProperties;
+    private final StorageProperties storageProperties;
 
     @Autowired
-    public MinioHealthIndicator(MinioClient minioClient, MinioConfigurationProperties minioConfigurationProperties) {
+    public MinioHealthIndicator(MinioClient minioClient, StorageProperties storageProperties) {
         this.minioClient = minioClient;
-        this.minioConfigurationProperties = minioConfigurationProperties;
+        this.storageProperties = storageProperties;
     }
 
 
@@ -53,20 +53,20 @@ public class MinioHealthIndicator implements HealthIndicator {
 
         try {
             BucketExistsArgs args = BucketExistsArgs.builder()
-                    .bucket(minioConfigurationProperties.getBucket())
+                    .bucket(storageProperties.getBucket())
                     .build();
             if (minioClient.bucketExists(args)) {
                 return Health.up()
-                        .withDetail("bucketName", minioConfigurationProperties.getBucket())
+                        .withDetail("bucketName", storageProperties.getBucket())
                         .build();
             } else {
                 return Health.down()
-                        .withDetail("bucketName", minioConfigurationProperties.getBucket())
+                        .withDetail("bucketName", storageProperties.getBucket())
                         .build();
             }
         } catch (Exception e) {
             return Health.down(e)
-                    .withDetail("bucketName", minioConfigurationProperties.getBucket())
+                    .withDetail("bucketName", storageProperties.getBucket())
                     .build();
         }
     }

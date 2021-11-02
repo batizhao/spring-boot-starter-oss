@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 public class MinioMetricConfiguration {
 
     private final MeterRegistry meterRegistry;
-    private final MinioConfigurationProperties minioConfigurationProperties;
+    private final StorageProperties storageProperties;
 
     private Timer listOkTimer;
     private Timer listKoTimer;
@@ -59,79 +59,79 @@ public class MinioMetricConfiguration {
     private Timer listBucketKoTimer;
 
     @Autowired
-    public MinioMetricConfiguration(MeterRegistry meterRegistry, MinioConfigurationProperties minioConfigurationProperties) {
+    public MinioMetricConfiguration(MeterRegistry meterRegistry, StorageProperties storageProperties) {
         this.meterRegistry = meterRegistry;
-        this.minioConfigurationProperties = minioConfigurationProperties;
+        this.storageProperties = storageProperties;
     }
 
     @PostConstruct
     public void initTimers() {
         listOkTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName())
+                .builder(storageProperties.getMetricName())
                 .tag("operation", "listObjects")
                 .tag("status", "ok")
-                .tag("bucket", minioConfigurationProperties.getBucket())
+                .tag("bucket", storageProperties.getBucket())
                 .register(meterRegistry);
 
         listKoTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName())
+                .builder(storageProperties.getMetricName())
                 .tag("operation", "listObjects")
                 .tag("status", "ko")
-                .tag("bucket", minioConfigurationProperties.getBucket())
+                .tag("bucket", storageProperties.getBucket())
                 .register(meterRegistry);
 
         getOkTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName())
+                .builder(storageProperties.getMetricName())
                 .tag("operation", "getObject")
                 .tag("status", "ok")
-                .tag("bucket", minioConfigurationProperties.getBucket())
+                .tag("bucket", storageProperties.getBucket())
                 .register(meterRegistry);
 
         getKoTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName())
+                .builder(storageProperties.getMetricName())
                 .tag("operation", "getObject")
                 .tag("status", "ko")
-                .tag("bucket", minioConfigurationProperties.getBucket())
+                .tag("bucket", storageProperties.getBucket())
                 .register(meterRegistry);
 
         putOkTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName())
+                .builder(storageProperties.getMetricName())
                 .tag("operation", "putObject")
                 .tag("status", "ok")
-                .tag("bucket", minioConfigurationProperties.getBucket())
+                .tag("bucket", storageProperties.getBucket())
                 .register(meterRegistry);
 
         putKoTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName())
+                .builder(storageProperties.getMetricName())
                 .tag("operation", "putObject")
                 .tag("status", "ko")
-                .tag("bucket", minioConfigurationProperties.getBucket())
+                .tag("bucket", storageProperties.getBucket())
                 .register(meterRegistry);
 
         listBucketOkTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName() + ".list.bucket")
+                .builder(storageProperties.getMetricName() + ".list.bucket")
                 .tag("operation", "listBuckets")
                 .tag("status", "ok")
                 .register(meterRegistry);
 
         listBucketKoTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName() + ".list.bucket")
+                .builder(storageProperties.getMetricName() + ".list.bucket")
                 .tag("operation", "listBuckets")
                 .tag("status", "ko")
                 .register(meterRegistry);
 
         removeOkTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName())
+                .builder(storageProperties.getMetricName())
                 .tag("operation", "removeObject")
                 .tag("status", "ok")
-                .tag("bucket", minioConfigurationProperties.getBucket())
+                .tag("bucket", storageProperties.getBucket())
                 .register(meterRegistry);
 
         removeKoTimer = Timer
-                .builder(minioConfigurationProperties.getMetricName())
+                .builder(storageProperties.getMetricName())
                 .tag("operation", "removeObject")
                 .tag("status", "ko")
-                .tag("bucket", minioConfigurationProperties.getBucket())
+                .tag("bucket", storageProperties.getBucket())
                 .register(meterRegistry);
     }
 

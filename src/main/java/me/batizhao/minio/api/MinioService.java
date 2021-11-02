@@ -21,9 +21,8 @@ import io.minio.*;
 import io.minio.messages.Item;
 import me.batizhao.minio.exception.MinioException;
 import me.batizhao.minio.exception.MinioFetchException;
-import me.batizhao.minio.config.MinioConfigurationProperties;
+import me.batizhao.minio.config.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.InputStream;
@@ -36,7 +35,7 @@ import java.util.stream.StreamSupport;
 
 
 /**
- * Service class to interact with Minio bucket. This class is register as a bean and use the properties defined in {@link MinioConfigurationProperties}.
+ * Service class to interact with Minio bucket. This class is register as a bean and use the properties defined in {@link StorageProperties}.
  * All methods return an {@link MinioException} which wrap the Minio SDK exception.
  * The bucket name is provided with the one defined in the configuration properties.
  *
@@ -46,16 +45,13 @@ import java.util.stream.StreamSupport;
  * This service adapetd with minio sdk 7.0.x
  * @author Mostafa Jalambadani
  */
-@Service
-public class MinioService {
-
-    private final MinioClient minioClient;
-    private final MinioConfigurationProperties configurationProperties;
+public class MinioService extends BaseStorageService implements StorageService<Item> {
 
     @Autowired
-    public MinioService(MinioClient minioClient, MinioConfigurationProperties configurationProperties) {
-        this.minioClient = minioClient;
-        this.configurationProperties = configurationProperties;
+    private MinioClient minioClient;
+
+    public MinioService(StorageProperties properties) {
+        super(properties);
     }
 
     /**
@@ -65,7 +61,7 @@ public class MinioService {
      */
     public List<Item> list() {
         ListObjectsArgs args = ListObjectsArgs.builder()
-                .bucket(configurationProperties.getBucket())
+                .bucket(getProperties().getBucket())
                 .prefix("")
                 .recursive(false)
                 .build();
@@ -80,7 +76,7 @@ public class MinioService {
      */
     public List<Item> fullList() {
         ListObjectsArgs args = ListObjectsArgs.builder()
-                .bucket(configurationProperties.getBucket())
+                .bucket(getProperties().getBucket())
                 .build();
         Iterable<Result<Item>> myObjects = minioClient.listObjects(args);
         return getItems(myObjects);
@@ -95,7 +91,7 @@ public class MinioService {
      */
     public List<Item> list(Path path) {
         ListObjectsArgs args = ListObjectsArgs.builder()
-                .bucket(configurationProperties.getBucket())
+                .bucket(getProperties().getBucket())
                 .prefix(path.toString())
                 .recursive(false)
                 .build();
@@ -113,7 +109,7 @@ public class MinioService {
      */
     public List<Item> getFullList(Path path) {
         ListObjectsArgs args = ListObjectsArgs.builder()
-                .bucket(configurationProperties.getBucket())
+                .bucket(getProperties().getBucket())
                 .prefix(path.toString())
                 .build();
         Iterable<Result<Item>> myObjects = minioClient.listObjects(args);
@@ -149,7 +145,7 @@ public class MinioService {
     public InputStream get(Path path) throws MinioException {
         try {
             GetObjectArgs args = GetObjectArgs.builder()
-                    .bucket(configurationProperties.getBucket())
+                    .bucket(getProperties().getBucket())
                     .object(path.toString())
                     .build();
             return minioClient.getObject(args);
@@ -168,7 +164,7 @@ public class MinioService {
     public StatObjectResponse getMetadata(Path path) throws MinioException {
         try {
             StatObjectArgs args = StatObjectArgs.builder()
-                    .bucket(configurationProperties.getBucket())
+                    .bucket(getProperties().getBucket())
                     .object(path.toString())
                     .build();
             return minioClient.statObject(args);
@@ -188,7 +184,7 @@ public class MinioService {
             .map(path -> {
                 try {
                     StatObjectArgs args = StatObjectArgs.builder()
-                            .bucket(configurationProperties.getBucket())
+                            .bucket(getProperties().getBucket())
                             .object(path.toString())
                             .build();
                     return new HashMap.SimpleEntry<>(path, minioClient.statObject(args));
@@ -209,7 +205,7 @@ public class MinioService {
     public void getAndSave(Path source, String fileName) throws MinioException {
         try {
             DownloadObjectArgs args = DownloadObjectArgs.builder()
-                    .bucket(configurationProperties.getBucket())
+                    .bucket(getProperties().getBucket())
                     .object(source.toString())
                     .filename(fileName)
                     .build();
@@ -231,7 +227,7 @@ public class MinioService {
             MinioException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
-                    .bucket(configurationProperties.getBucket())
+                    .bucket(getProperties().getBucket())
                     .object(source.toString())
                     .stream(file, file.available(), -1)
                     .headers(headers)
@@ -253,7 +249,7 @@ public class MinioService {
             MinioException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
-                    .bucket(configurationProperties.getBucket())
+                    .bucket(getProperties().getBucket())
                     .object(source.toString())
                     .stream(file, file.available(), -1)
                     .build();
@@ -276,7 +272,7 @@ public class MinioService {
             MinioException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
-                    .bucket(configurationProperties.getBucket())
+                    .bucket(getProperties().getBucket())
                     .object(source.toString())
                     .stream(file, file.available(), -1)
                     .headers(headers)
@@ -301,7 +297,7 @@ public class MinioService {
             MinioException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
-                    .bucket(configurationProperties.getBucket())
+                    .bucket(getProperties().getBucket())
                     .object(source.toString())
                     .stream(file, file.available(), -1)
                     .contentType(contentType)
@@ -324,7 +320,7 @@ public class MinioService {
             MinioException {
         try {
             UploadObjectArgs args = UploadObjectArgs.builder()
-                    .bucket(configurationProperties.getBucket())
+                    .bucket(getProperties().getBucket())
                     .object(source.toString())
                     .filename(file.getAbsolutePath())
                     .build();
@@ -344,7 +340,7 @@ public class MinioService {
     public void remove(Path source) throws MinioException {
         try {
             RemoveObjectArgs args = RemoveObjectArgs.builder()
-                    .bucket(configurationProperties.getBucket())
+                    .bucket(getProperties().getBucket())
                     .object(source.toString())
                     .build();
             minioClient.removeObject(args);

@@ -24,12 +24,11 @@ import me.batizhao.minio.exception.MinioException;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -38,57 +37,54 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 @Configuration
-@ConditionalOnClass(MinioClient.class)
-@EnableConfigurationProperties(MinioConfigurationProperties.class)
-@ComponentScan("me.batizhao.minio.api")
+@EnableConfigurationProperties(StorageProperties.class)
+@Import(StorageAutoConfiguration.class)
 public class MinioConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MinioConfiguration.class);
 
-    @Autowired
-    private MinioConfigurationProperties minioConfigurationProperties;
-
     @Bean
-    public MinioClient minioClient() throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, InternalException, ErrorResponseException, InvalidResponseException, MinioException, XmlParserException, ServerException {
+    @ConditionalOnClass(MinioClient.class)
+    public MinioClient minioClient(StorageProperties storageProperties) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, InternalException, ErrorResponseException, InvalidResponseException, MinioException, XmlParserException, ServerException {
 
         MinioClient minioClient;
         if (!configuredProxy()) {
             minioClient = MinioClient.builder()
-                    .endpoint(minioConfigurationProperties.getUrl())
-                    .credentials(minioConfigurationProperties.getAccessKey(), minioConfigurationProperties.getSecretKey())
+                    .endpoint(storageProperties.getUrl())
+                    .credentials(storageProperties.getAccessKey(), storageProperties.getSecretKey())
                     .build();
         } else {
             minioClient = MinioClient.builder()
-                    .endpoint(minioConfigurationProperties.getUrl())
-                    .credentials(minioConfigurationProperties.getAccessKey(), minioConfigurationProperties.getSecretKey())
+                    .endpoint(storageProperties.getUrl())
+                    .credentials(storageProperties.getAccessKey(), storageProperties.getSecretKey())
                     .httpClient(client())
                     .build();
         }
         minioClient.setTimeout(
-                minioConfigurationProperties.getConnectTimeout().toMillis(),
-                minioConfigurationProperties.getWriteTimeout().toMillis(),
-                minioConfigurationProperties.getReadTimeout().toMillis()
+                storageProperties.getConnectTimeout().toMillis(),
+                storageProperties.getWriteTimeout().toMillis(),
+                storageProperties.getReadTimeout().toMillis()
         );
 
-        if (minioConfigurationProperties.isCheckBucket()) {
+        if (storageProperties.isCheckBucket()) {
             try {
-                LOGGER.debug("Checking if bucket {} exists", minioConfigurationProperties.getBucket());
+                LOGGER.debug("Checking if bucket {} exists", storageProperties.getBucket());
                 BucketExistsArgs existsArgs = BucketExistsArgs.builder()
-                        .bucket(minioConfigurationProperties.getBucket())
+                        .bucket(storageProperties.getBucket())
                         .build();
                 boolean b = minioClient.bucketExists(existsArgs);
                 if (!b) {
-                    if (minioConfigurationProperties.isCreateBucket()) {
+                    if (storageProperties.isCreateBucket()) {
                         try {
                             MakeBucketArgs makeBucketArgs = MakeBucketArgs.builder()
-                                    .bucket(minioConfigurationProperties.getBucket())
+                                    .bucket(storageProperties.getBucket())
                                     .build();
                             minioClient.makeBucket(makeBucketArgs);
                         } catch (Exception e) {
                             throw new MinioException("Cannot create bucket", e);
                         }
                     } else {
-                        throw new IllegalStateException("Bucket does not exist: " + minioConfigurationProperties.getBucket());
+                        throw new IllegalStateException("Bucket does not exist: " + storageProperties.getBucket());
                     }
                 }
             } catch (Exception e) {

@@ -47,14 +47,14 @@ public class MinioNotificationConfiguration implements ApplicationContextAware {
     private static final Logger LOGGER = LoggerFactory.getLogger(MinioNotificationConfiguration.class);
 
     private final MinioClient minioClient;
-    private final MinioConfigurationProperties minioConfigurationProperties;
+    private final StorageProperties storageProperties;
 
     private List<Thread> handlers = new ArrayList<>();
 
     @Autowired
-    public MinioNotificationConfiguration(MinioClient minioClient, MinioConfigurationProperties minioConfigurationProperties) {
+    public MinioNotificationConfiguration(MinioClient minioClient, StorageProperties storageProperties) {
         this.minioClient = minioClient;
-        this.minioConfigurationProperties = minioConfigurationProperties;
+        this.storageProperties = storageProperties;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class MinioNotificationConfiguration implements ApplicationContextAware {
                             try {
                                 LOGGER.info("Registering Minio handler on {} with notification {}", m.getName(), Arrays.toString(annotation.value()));
                                 ListenBucketNotificationArgs args = ListenBucketNotificationArgs.builder()
-                                        .bucket(minioConfigurationProperties.getBucket())
+                                        .bucket(storageProperties.getBucket())
                                         .prefix(annotation.prefix())
                                         .suffix(annotation.suffix())
                                         .events(annotation.value())
