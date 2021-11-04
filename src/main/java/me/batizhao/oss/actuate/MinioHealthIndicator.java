@@ -24,6 +24,7 @@ import org.springframework.boot.actuate.autoconfigure.web.server.ManagementConte
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
  * @author Jordan LEFEBURE
  */
 @ConditionalOnClass(ManagementContextAutoConfiguration.class)
+@ConditionalOnProperty(name = "pecado.storage.location", havingValue = "minio")
 @Component
 public class MinioHealthIndicator implements HealthIndicator {
 

@@ -20,7 +20,7 @@ import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.errors.*;
-import me.batizhao.oss.exception.MinioException;
+import me.batizhao.oss.exception.StorageException;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public class MinioAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(name = "pecado.storage.location", havingValue = "minio")
-    public MinioClient minioClient(StorageProperties storageProperties) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, InternalException, ErrorResponseException, InvalidResponseException, MinioException, XmlParserException, ServerException {
+    public MinioClient minioClient(StorageProperties storageProperties) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, InternalException, ErrorResponseException, InvalidResponseException, StorageException, XmlParserException, ServerException {
 
         MinioClient minioClient;
         if (!configuredProxy()) {
@@ -79,7 +79,7 @@ public class MinioAutoConfiguration {
                                     .build();
                             minioClient.makeBucket(makeBucketArgs);
                         } catch (Exception e) {
-                            throw new MinioException("Cannot create bucket", e);
+                            throw new StorageException("Cannot create bucket", e);
                         }
                     } else {
                         throw new IllegalStateException("Bucket does not exist: " + storageProperties.getBucket());

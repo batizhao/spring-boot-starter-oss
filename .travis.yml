@@ -17,7 +17,7 @@ deploy:
   file: target/*.jar
   on:
     tags: true
-    repo: jlefebure/spring-boot-starter-minio
+    repo: batizhao/spring-boot-starter-oss
 env:
   global:
   - secure: OU+tS+mmcBLYWa0Cv4r20CwRFvvRcUfrTAmnKg2QB1GEAGm9rgFBTDpzbm6gomO1ETR/zqxWTG4mUoo0GoZTqaNo2c3lSljfzhWBXCRb2cYTTMg0O+sTM7oxIRut+TXSg0CEROzXqGBdU5U2vbNCB9CGlkyDjDEfz20Qdor6x8jgOuPYaj0IWNC0lt6k3HdGuKyiy90UM8nHi3p1/E287IUQnwpt7o9EnKMITtxW81PTSpS1SgDebNkxCmgwEHZbYmF3KcAKQHFpsUnEPYfRMqrev3nLAO86zr9uy+kGpMOkuhVqb1DVzQxz2gzIoC3kN6Qk2R4Gz+kGIpjipOxWegEbl1ACyPlxeAyBi/RRqq81ba4MSsyoQHIuAdYUFe9NglWDltDWLRM6uE1Lg95smMvBDnIj3jFeCJe0tEHoS+EMw3sLwBBnQLGg9W27X4FGNCo/ZD8seEy9z9RyOk/YjI4zUS64foEzDccarUx0D3fWHBZHyV4j6p9wfVJDiwukSnV/k3v6E5GJRZpEM1knJyCC02OvneFwBMxCxStaC1JrJfEpxSMMWiobED0p4/8qZGALVQ7QaUtM0YLHGljTUDwEhwQv10rXZce2IvFzQ7WEZz8arjWztEyYfcvnfMmw3nu50IXmKTfDm2eS1At+jS2Aizs7jUVFDIUL+FvL4vI=

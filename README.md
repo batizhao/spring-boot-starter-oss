@@ -1,6 +1,6 @@
 # Spring Boot Starter Minio
 
-[![Build Status](https://travis-ci.org/jlefebure/spring-boot-starter-minio.svg?branch=master)](https://travis-ci.org/jlefebure/spring-boot-starter-minio)
+[![Build Status](https://travis-ci.org/batizhao/spring-boot-starter-oss.svg?branch=master)](https://travis-ci.org/jlefebure/spring-boot-starter-minio)
 
 Spring Boot Starter which allow to connect to a Minio bucket, to save, get, remove an object. The starter also embed 
 metrics and health check for Actuator.  
@@ -12,15 +12,15 @@ Just add the dependency to an existing Spring Boot project.
 Maven
 ```xml
 <dependency>
-    <groupId>com.jlefebure</groupId>
-    <artifactId>spring-boot-starter-minio</artifactId>
+    <groupId>me.batizhao</groupId>
+    <artifactId>spring-boot-starter-oss</artifactId>
     <version>1.1</version>
 </dependency>
 ```
 
 Gradle 
 ```groovy
-    implementation 'com.jlefebure:spring-boot-starter-minio:1.1'
+    implementation 'me.batizhao:spring-boot-starter-oss:1.1'
 ```
 
 

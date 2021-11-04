@@ -19,7 +19,7 @@ package me.batizhao.oss.api;
 
 import io.minio.*;
 import io.minio.messages.Item;
-import me.batizhao.oss.exception.MinioException;
+import me.batizhao.oss.exception.StorageException;
 import me.batizhao.oss.exception.MinioFetchException;
 import me.batizhao.oss.config.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ import java.util.stream.StreamSupport;
 
 /**
  * Service class to interact with Minio bucket. This class is register as a bean and use the properties defined in {@link StorageProperties}.
- * All methods return an {@link MinioException} which wrap the Minio SDK exception.
+ * All methods return an {@link StorageException} which wrap the Minio SDK exception.
  * The bucket name is provided with the one defined in the configuration properties.
  *
  * @author Jordan LEFEBURE
@@ -45,7 +45,7 @@ import java.util.stream.StreamSupport;
  * This service adapetd with minio sdk 7.0.x
  * @author Mostafa Jalambadani
  */
-public class MinioService extends BaseStorageService implements StorageService<Item> {
+public class MinioService extends BaseStorageService implements StorageService {
 
     @Autowired
     private MinioClient minioClient;
@@ -59,11 +59,10 @@ public class MinioService extends BaseStorageService implements StorageService<I
      *
      * @return List of items
      */
-    public List<Item> list() {
+    public List list() {
         ListObjectsArgs args = ListObjectsArgs.builder()
                 .bucket(getProperties().getBucket())
                 .prefix("")
-                .recursive(false)
                 .build();
         Iterable<Result<Item>> myObjects = minioClient.listObjects(args);
         return getItems(myObjects);
@@ -74,9 +73,11 @@ public class MinioService extends BaseStorageService implements StorageService<I
      *
      * @return List of items
      */
-    public List<Item> fullList() {
+    public List fullList() {
         ListObjectsArgs args = ListObjectsArgs.builder()
                 .bucket(getProperties().getBucket())
+                .prefix("")
+                .recursive(true)
                 .build();
         Iterable<Result<Item>> myObjects = minioClient.listObjects(args);
         return getItems(myObjects);
@@ -89,11 +90,10 @@ public class MinioService extends BaseStorageService implements StorageService<I
      * @param path Prefix of seeked list of object
      * @return List of items
      */
-    public List<Item> list(Path path) {
+    public List list(Path path) {
         ListObjectsArgs args = ListObjectsArgs.builder()
                 .bucket(getProperties().getBucket())
                 .prefix(path.toString())
-                .recursive(false)
                 .build();
         Iterable<Result<Item>> myObjects = minioClient.listObjects(args);
         return getItems(myObjects);
@@ -107,10 +107,11 @@ public class MinioService extends BaseStorageService implements StorageService<I
      * @param path Prefix of seeked list of object
      * @return List of items
      */
-    public List<Item> getFullList(Path path) {
+    public List fullList(Path path) {
         ListObjectsArgs args = ListObjectsArgs.builder()
                 .bucket(getProperties().getBucket())
                 .prefix(path.toString())
+                .recursive(true)
                 .build();
         Iterable<Result<Item>> myObjects = minioClient.listObjects(args);
         return getItems(myObjects);
@@ -140,9 +141,9 @@ public class MinioService extends BaseStorageService implements StorageService<I
      *
      * @param path Path with prefix to the object. Object name must be included.
      * @return The object as an InputStream
-     * @throws MinioException if an error occur while fetch object
+     * @throws StorageException if an error occur while fetch object
      */
-    public InputStream get(Path path) throws MinioException {
+    public InputStream get(Path path) throws StorageException {
         try {
             GetObjectArgs args = GetObjectArgs.builder()
                     .bucket(getProperties().getBucket())
@@ -150,7 +151,7 @@ public class MinioService extends BaseStorageService implements StorageService<I
                     .build();
             return minioClient.getObject(args);
         } catch (Exception e) {
-            throw new MinioException("Error while fetching files in Minio", e);
+            throw new StorageException("Error while fetching files in Minio", e);
         }
     }
 
@@ -159,9 +160,9 @@ public class MinioService extends BaseStorageService implements StorageService<I
      *
      * @param path Path with prefix to the object. Object name must be included.
      * @return Metadata of the  object
-     * @throws MinioException if an error occur while fetching object metadatas
+     * @throws StorageException if an error occur while fetching object metadatas
      */
-    public StatObjectResponse getMetadata(Path path) throws MinioException {
+    public StatObjectResponse getMetadata(Path path) throws StorageException {
         try {
             StatObjectArgs args = StatObjectArgs.builder()
                     .bucket(getProperties().getBucket())
@@ -169,7 +170,7 @@ public class MinioService extends BaseStorageService implements StorageService<I
                     .build();
             return minioClient.statObject(args);
         } catch (Exception e) {
-            throw new MinioException("Error while fetching files in Minio", e);
+            throw new StorageException("Error while fetching files in Minio", e);
         }
     }
 
@@ -200,9 +201,9 @@ public class MinioService extends BaseStorageService implements StorageService<I
      *
      * @param source   Path with prefix to the object. Object name must be included.
      * @param fileName Filename
-     * @throws MinioException if an error occur while fetch object
+     * @throws StorageException if an error occur while fetch object
      */
-    public void getAndSave(Path source, String fileName) throws MinioException {
+    public void getAndSave(Path source, String fileName) throws StorageException {
         try {
             DownloadObjectArgs args = DownloadObjectArgs.builder()
                     .bucket(getProperties().getBucket())
@@ -211,7 +212,7 @@ public class MinioService extends BaseStorageService implements StorageService<I
                     .build();
             minioClient.downloadObject(args);
         } catch (Exception e) {
-            throw new MinioException("Error while fetching files in Minio", e);
+            throw new StorageException("Error while fetching files in Minio", e);
         }
     }
 
@@ -221,10 +222,10 @@ public class MinioService extends BaseStorageService implements StorageService<I
      * @param source      Path with prefix to the object. Object name must be included.
      * @param file        File as an inputstream
      * @param headers     Additional headers to put on the file. The map MUST be mutable. All custom headers will start with 'x-amz-meta-' prefix when fetched with {@code getMetadata()} method.
-     * @throws MinioException if an error occur while uploading object
+     * @throws StorageException if an error occur while uploading object
      */
     public void upload(Path source, InputStream file, Map<String, String> headers) throws
-            MinioException {
+            StorageException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
                     .bucket(getProperties().getBucket())
@@ -234,7 +235,7 @@ public class MinioService extends BaseStorageService implements StorageService<I
                     .build();
             minioClient.putObject(args);
         } catch (Exception e) {
-            throw new MinioException("Error while fetching files in Minio", e);
+            throw new StorageException("Error while fetching files in Minio", e);
         }
     }
 
@@ -243,10 +244,9 @@ public class MinioService extends BaseStorageService implements StorageService<I
      *
      * @param source      Path with prefix to the object. Object name must be included.
      * @param file        File as an inputstream
-     * @throws MinioException if an error occur while uploading object
+     * @throws StorageException if an error occur while uploading object
      */
-    public void upload(Path source, InputStream file) throws
-            MinioException {
+    public void upload(Path source, InputStream file) throws StorageException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
                     .bucket(getProperties().getBucket())
@@ -255,7 +255,7 @@ public class MinioService extends BaseStorageService implements StorageService<I
                     .build();
             minioClient.putObject(args);
         } catch (Exception e) {
-            throw new MinioException("Error while fetching files in Minio", e);
+            throw new StorageException("Error while fetching files in Minio", e);
         }
     }
 
@@ -266,10 +266,10 @@ public class MinioService extends BaseStorageService implements StorageService<I
      * @param file        File as an inputstream
      * @param contentType MIME type for the object
      * @param headers     Additional headers to put on the file. The map MUST be mutable
-     * @throws MinioException if an error occur while uploading object
+     * @throws StorageException if an error occur while uploading object
      */
     public void upload(Path source, InputStream file, String contentType, Map<String, String> headers) throws
-            MinioException {
+            StorageException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
                     .bucket(getProperties().getBucket())
@@ -281,7 +281,7 @@ public class MinioService extends BaseStorageService implements StorageService<I
 
             minioClient.putObject(args);
         } catch (Exception e) {
-            throw new MinioException("Error while fetching files in Minio", e);
+            throw new StorageException("Error while fetching files in Minio", e);
         }
     }
 
@@ -291,10 +291,10 @@ public class MinioService extends BaseStorageService implements StorageService<I
      * @param source      Path with prefix to the object. Object name must be included.
      * @param file        File as an inputstream
      * @param contentType MIME type for the object
-     * @throws MinioException if an error occur while uploading object
+     * @throws StorageException if an error occur while uploading object
      */
     public void upload(Path source, InputStream file, String contentType) throws
-            MinioException {
+            StorageException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
                     .bucket(getProperties().getBucket())
@@ -305,7 +305,7 @@ public class MinioService extends BaseStorageService implements StorageService<I
 
             minioClient.putObject(args);
         } catch (Exception e) {
-            throw new MinioException("Error while fetching files in Minio", e);
+            throw new StorageException("Error while fetching files in Minio", e);
         }
     }
 
@@ -314,10 +314,10 @@ public class MinioService extends BaseStorageService implements StorageService<I
      * upload file bigger than Xmx size
      * @param source      Path with prefix to the object. Object name must be included.
      * @param file        File as an Filename
-     * @throws MinioException if an error occur while uploading object
+     * @throws StorageException if an error occur while uploading object
      */
     public void upload(Path source, File file) throws
-            MinioException {
+            StorageException {
         try {
             UploadObjectArgs args = UploadObjectArgs.builder()
                     .bucket(getProperties().getBucket())
@@ -326,7 +326,7 @@ public class MinioService extends BaseStorageService implements StorageService<I
                     .build();
             minioClient.uploadObject(args);
         } catch (Exception e) {
-            throw new MinioException("Error while fetching files in Minio", e);
+            throw new StorageException("Error while fetching files in Minio", e);
         }
     }
 
@@ -335,9 +335,9 @@ public class MinioService extends BaseStorageService implements StorageService<I
      * Remove a file to Minio
      *
      * @param source Path with prefix to the object. Object name must be included.
-     * @throws MinioException if an error occur while removing object
+     * @throws StorageException if an error occur while removing object
      */
-    public void remove(Path source) throws MinioException {
+    public void remove(Path source) throws StorageException {
         try {
             RemoveObjectArgs args = RemoveObjectArgs.builder()
                     .bucket(getProperties().getBucket())
@@ -345,7 +345,7 @@ public class MinioService extends BaseStorageService implements StorageService<I
                     .build();
             minioClient.removeObject(args);
         } catch (Exception e) {
-            throw new MinioException("Error while fetching files in Minio", e);
+            throw new StorageException("Error while fetching files in Minio", e);
         }
     }
 

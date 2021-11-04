@@ -29,6 +29,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@ConditionalOnProperty(name = "pecado.storage.location", havingValue = "minio")
 @AutoConfigureBefore(MinioMetricConfiguration.class)
 @AutoConfigureAfter(MinioAutoConfiguration.class)
 public class MinioNotificationConfiguration implements ApplicationContextAware {

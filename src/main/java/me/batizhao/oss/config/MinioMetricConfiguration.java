@@ -31,6 +31,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -40,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @ConditionalOnClass({MinioClient.class, ManagementContextAutoConfiguration.class})
 @ConditionalOnEnabledHealthIndicator("minio")
+@ConditionalOnProperty(name = "pecado.storage.location", havingValue = "minio")
 @AutoConfigureBefore(HealthContributorAutoConfiguration.class)
 @AutoConfigureAfter(MinioAutoConfiguration.class)
 public class MinioMetricConfiguration {
