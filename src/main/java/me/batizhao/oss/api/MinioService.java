@@ -19,9 +19,9 @@ package me.batizhao.oss.api;
 
 import io.minio.*;
 import io.minio.messages.Item;
-import me.batizhao.oss.exception.StorageException;
-import me.batizhao.oss.exception.MinioFetchException;
 import me.batizhao.oss.config.StorageProperties;
+import me.batizhao.oss.exception.MinioFetchException;
+import me.batizhao.oss.exception.StorageException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
@@ -69,6 +69,22 @@ public class MinioService extends BaseStorageService implements StorageService {
     }
 
     /**
+     * List all objects with the prefix given in parameter for the bucket.
+     * Simulate a folder hierarchy. Objects within folders (i.e. all objects which match the pattern {@code {prefix}/{objectName}/...}) are not returned
+     *
+     * @param prefix Prefix of seeked list of object
+     * @return List of items
+     */
+    public List list(String prefix) {
+        ListObjectsArgs args = ListObjectsArgs.builder()
+                .bucket(getProperties().getBucket())
+                .prefix(prefix)
+                .build();
+        Iterable<Result<Item>> myObjects = minioClient.listObjects(args);
+        return getItems(myObjects);
+    }
+
+    /**
      * List all objects at root of the bucket
      *
      * @return List of items
@@ -84,33 +100,17 @@ public class MinioService extends BaseStorageService implements StorageService {
     }
 
     /**
-     * List all objects with the prefix given in parameter for the bucket.
-     * Simulate a folder hierarchy. Objects within folders (i.e. all objects which match the pattern {@code {prefix}/{objectName}/...}) are not returned
-     *
-     * @param path Prefix of seeked list of object
-     * @return List of items
-     */
-    public List list(Path path) {
-        ListObjectsArgs args = ListObjectsArgs.builder()
-                .bucket(getProperties().getBucket())
-                .prefix(path.toString())
-                .build();
-        Iterable<Result<Item>> myObjects = minioClient.listObjects(args);
-        return getItems(myObjects);
-    }
-
-    /**
      * List all objects with the prefix given in parameter for the bucket
      * <p>
      * All objects, even those which are in a folder are returned.
      *
-     * @param path Prefix of seeked list of object
+     * @param prefix Prefix of seeked list of object
      * @return List of items
      */
-    public List fullList(Path path) {
+    public List fullList(String prefix) {
         ListObjectsArgs args = ListObjectsArgs.builder()
                 .bucket(getProperties().getBucket())
-                .prefix(path.toString())
+                .prefix(prefix)
                 .recursive(true)
                 .build();
         Iterable<Result<Item>> myObjects = minioClient.listObjects(args);

@@ -13,32 +13,34 @@ import java.util.List;
 public interface StorageService {
 
     /**
-     * 列出所有对象
+     * 列出子文件或目录
      *
      * @return List of items
      */
     List list();
 
     /**
-     * 列出 path 下所有对象
+     * 列出子文件或目录，以 prefix 为前缀
+     * @param prefix
      *
      * @return List of items
      */
-    List list(Path path);
+    List list(String prefix);
 
     /**
-     * 列出所有对象，包括所有子对象
+     * 列出所有子文件
      *
-     * @return List of items
+     * @return List of regular file
      */
     List fullList();
 
     /**
-     * 列出 path 下所有对象，包括所有子对象
-     * @param path
-     * @return
+     * 列出所有子文件，以 prefix 为前缀
+     * @param prefix
+     *
+     * @return List of regular file
      */
-    List fullList(Path path);
+    List fullList(String prefix);
 
     /**
      * Upload file

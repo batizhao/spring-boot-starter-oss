@@ -1,14 +1,10 @@
 package me.batizhao.oss.api;
 
-import io.minio.messages.Item;
 import lombok.SneakyThrows;
 import me.batizhao.oss.config.StorageProperties;
-import me.batizhao.oss.exception.StorageException;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 
-import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,25 +28,71 @@ public class DasService extends BaseStorageService implements StorageService {
         super(properties);
     }
 
+    @SneakyThrows
     @Override
     public List list() {
-        return null;
-    }
-
-    @Override
-    public List list(Path path) {
-        return null;
-    }
-
-    @Override
-    public List fullList() {
-        return null;
+        return Files.walk(Paths.get(getProperties().getUrl()), 1)
+                .skip(1)
+                .filter(p -> {
+                    try {
+                        return !Files.isHidden(p);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+                })
+                .collect(Collectors.toList());
     }
 
     @SneakyThrows
     @Override
-    public List fullList(Path path) {
-        return Files.find(path, Integer.MAX_VALUE, (p, a) -> p.toString().endsWith(".vm") && a.isRegularFile())
+    public List list(String prefix) {
+        return Files.walk(Paths.get(getProperties().getUrl()), 1)
+                .skip(1)
+                .filter(p -> {
+                    try {
+                        return !Files.isHidden(p);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+                })
+                .filter(p -> p.toAbsolutePath().toString().replace(getProperties().getUrl(), "").contains("/" + prefix))
+                .collect(Collectors.toList());
+    }
+
+    @SneakyThrows
+    @Override
+    public List fullList() {
+        return Files.walk(Paths.get(getProperties().getUrl()), Integer.MAX_VALUE)
+                .skip(1)
+                .filter(p -> {
+                    try {
+                        return !Files.isHidden(p);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+                })
+                .filter(Files::isRegularFile)
+                .collect(Collectors.toList());
+    }
+
+    @SneakyThrows
+    @Override
+    public List fullList(String prefix) {
+        return Files.walk(Paths.get(getProperties().getUrl()), Integer.MAX_VALUE)
+                .skip(1)
+                .filter(p -> {
+                    try {
+                        return !Files.isHidden(p);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+                })
+                .filter(Files::isRegularFile)
+                .filter(p -> p.toAbsolutePath().toString().replace(getProperties().getUrl(), "").contains("/" + prefix))
                 .collect(Collectors.toList());
     }
 

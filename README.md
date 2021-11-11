@@ -95,10 +95,10 @@ The method must be in a declared Spring bean to be handled.
 The following example print "Hello world" each time an object is download from Minio bucket.
 
 ```java
-    @MinioNotification({"s3:ObjectAccessed:Get"})
-    public void handleGet(NotificationInfo notificationInfo) {
-        System.out.println("Hello world");
-    }
+@MinioNotification({"s3:ObjectAccessed:Get"})
+public void handleGet(NotificationInfo notificationInfo) {
+    System.out.println("Hello world");
+}
 ```
 
 To work, your method must have only one parameter of class `NotificationInfo` and return `void`.
@@ -106,6 +106,22 @@ To work, your method must have only one parameter of class `NotificationInfo` an
 ## Actuator
 
 The starter add to Actuator some metrics and an health check to give a status on Minio connection.
+
+```yaml
+management:
+  # Health
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  # Metric
+  health:
+    minio:
+      enabled: true
+```
 
 ### Metric
 
@@ -191,7 +207,7 @@ shown.
     }
   }
 }
-``` 
+```
 
 The health check is done by checking if the bucket parameterized in the application properties exists. Then,
 

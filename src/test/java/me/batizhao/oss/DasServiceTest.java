@@ -22,13 +22,10 @@ import static org.hamcrest.Matchers.is;
 @ExtendWith(SpringExtension.class)
 @Import({StorageAutoConfiguration.class})
 @EnableConfigurationProperties(value = StorageProperties.class)
-@TestPropertySource(properties = {"pecado.storage.location=minio",
-        "pecado.storage.url=http://172.31.21.208:9000",
-        "pecado.storage.bucket=test",
-        "pecado.storage.access-key=minio",
-        "pecado.storage.secret-key=minio123"})
+@TestPropertySource(properties = {"pecado.storage.location=das",
+        "pecado.storage.url=/Users/batizhao/Documents/upload-dir/test"})
 @Slf4j
-public class MinioServiceTest {
+public class DasServiceTest {
 
     @Autowired
     StorageService storageService;
