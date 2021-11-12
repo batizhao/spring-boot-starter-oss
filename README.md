@@ -1,8 +1,8 @@
-# Spring Boot Starter Minio
+# Spring Boot Starter OSS
 
 [![Build Status](https://travis-ci.org/batizhao/spring-boot-starter-oss.svg?branch=master)](https://travis-ci.org/jlefebure/spring-boot-starter-minio)
 
-Spring Boot Starter which allow to connect to a Minio bucket, to save, get, remove an object. The starter also embed 
+Spring Boot Starter which allow to connect to a Minio bucket or DAS Storage, to save, get, remove an object. The starter also embed 
 metrics and health check for Actuator.  
 
 ## Quick start
@@ -27,14 +27,16 @@ Gradle
 Then, add the following properties to your `application.properties` file.
 
 ```properties
+# Storage Type: minio or das
+pecado.storage.location=minio
 # Minio Host
-spring.minio.url=https://play.min.io
+pecado.storage.url=https://play.min.io
 # Minio Bucket name for your application
-spring.minio.bucket=00000qweqwe
+pecado.storage.bucket=00000qweqwe
 # Minio access key (login)
-spring.minio.access-key=###Your accessKey###
+pecado.storage.access-key=###Your accessKey###
 # Minio secret key (password)
-spring.minio.secret-key=###Your secretKey###
+pecado.storage.secret-key=###Your secretKey###
 ```
 
 The default value are parameterized on the public Minio instance.
