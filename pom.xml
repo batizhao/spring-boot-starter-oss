@@ -20,7 +20,7 @@
 
     <groupId>me.batizhao</groupId>
     <artifactId>spring-boot-starter-oss</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <description>MinIO和本地存储</description>
 
     <distributionManagement>
@@ -40,7 +40,7 @@
         <url>scm:git:git@github.com:batizhao/spring-boot-starter-oss.git</url>
         <connection>scm:git:git@github.com:batizhao/spring-boot-starter-oss.git</connection>
         <developerConnection>scm:git:git@github.com:batizhao/spring-boot-starter-oss.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v1.1</tag>
     </scm>
 
     <properties>
