@@ -51,10 +51,10 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
 
-        <lombok.version>1.18.20</lombok.version>
-        <micrometer.version>1.7.5</micrometer.version>
-        <minio.version>8.3.3</minio.version>
-        <spring-boot.version>2.5.6</spring-boot.version>
+        <lombok.version>1.18.22</lombok.version>
+        <micrometer.version>1.8.1</micrometer.version>
+        <minio.version>8.3.4</minio.version>
+        <spring-boot.version>2.6.1</spring-boot.version>
 
         <jacoco-maven-plugin.verison>0.8.7</jacoco-maven-plugin.verison>
         <maven-release-plugin.version>3.0.0-M4</maven-release-plugin.version>
