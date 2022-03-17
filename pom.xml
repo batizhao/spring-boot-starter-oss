@@ -23,19 +23,6 @@
     <version>1.2-SNAPSHOT</version>
     <description>MinIO和本地存储</description>
 
-    <distributionManagement>
-        <repository>
-            <id>maven-releases</id>
-            <name>Release central Repository</name>
-            <url>http://172.31.22.47:8081/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <name>Snapshot Repository</name>
-            <url>http://172.31.22.47:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <scm>
         <url>scm:git:git@github.com:batizhao/spring-boot-starter-oss.git</url>
         <connection>scm:git:git@github.com:batizhao/spring-boot-starter-oss.git</connection>
@@ -51,14 +38,12 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
 
-        <lombok.version>1.18.22</lombok.version>
-        <micrometer.version>1.8.1</micrometer.version>
-        <minio.version>8.3.4</minio.version>
-        <spring-boot.version>2.6.1</spring-boot.version>
+        <spring-boot-dependencies.version>1.3-SNAPSHOT</spring-boot-dependencies.version>
+        <minio.version>8.3.7</minio.version>
 
         <jacoco-maven-plugin.verison>0.8.7</jacoco-maven-plugin.verison>
+        <maven-deploy-plugin.version>3.0.0-M2</maven-deploy-plugin.version>
         <maven-release-plugin.version>3.0.0-M4</maven-release-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
     </properties>
 
     <issueManagement>
@@ -74,18 +59,28 @@
         </license>
     </licenses>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>me.batizhao</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>${spring-boot.version}</version>
             <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <version>${spring-boot.version}</version>
             <optional>true</optional>
         </dependency>
 
@@ -98,33 +93,28 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
-            <version>${micrometer.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>${spring-boot.version}</version>
             <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-            <version>${spring-boot.version}</version>
             <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring-boot.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -133,8 +123,8 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
